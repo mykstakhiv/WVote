@@ -22,6 +22,7 @@ namespace Wvote
         public RegisterForm()
         {
             InitializeComponent();
+            this.StartPosition = FormStartPosition.CenterScreen;
         }
 
         private void Register(object sender, EventArgs e)

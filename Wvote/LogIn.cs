@@ -38,6 +38,7 @@ namespace Wvote
         public LogIn()
         {
             InitializeComponent();
+            this.StartPosition = FormStartPosition.CenterScreen;
         }
 
         private void RegisterLinkOpenForm(object sender, LinkLabelLinkClickedEventArgs e) 

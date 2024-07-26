@@ -10,14 +10,29 @@ using System.Windows.Forms;
 using Microsoft.Data.SqlClient;
 using System.Linq;
 using System.Collections;
+using Microsoft.VisualBasic.Logging;
 
 namespace Wvote
 {
     public partial class LogIn : Form
     {
-        private static RegisterForm reg = new RegisterForm();
         private static VoterInfocs inf = new VoterInfocs();
         private static Votes vt = new Votes();
+
+        private static LogIn instance;
+        private static RegisterForm reg;
+
+        public static LogIn Instance
+        {
+            get
+            {
+                if (instance == null)
+                {
+                    instance = new LogIn();
+                }
+                return instance;
+            }
+        }
 
 
         public LogIn()
@@ -25,20 +40,12 @@ namespace Wvote
             InitializeComponent();
         }
 
-        private void ShowRegForm()
+        private void RegisterLinkOpenForm(object sender, LinkLabelLinkClickedEventArgs e) 
         {
-            if (!reg.Visible)
-            {
-                reg.Show();
-            }
-            else
-            {
-                reg.BringToFront();
-                reg.Focus();
-            }
+            this.Hide();
+            RegisterForm.Instance.Show();
         }
-        private void RegisterLinkOpenForm(object sender, LinkLabelLinkClickedEventArgs e) => ShowRegForm();
-
+        
         private void LogInBttn(object sender, EventArgs e)
         {
             string connectionString = "Data Source=HP\\SQLEXPRESS;Initial Catalog=Voiting-Stah; Integrated Security=True; TrustServerCertificate=True";
@@ -54,7 +61,7 @@ namespace Wvote
 
             while (reader.Read())
             {
-                
+
                 string fullName = reader.GetString(1);
                 string email = reader.GetString(2);
 

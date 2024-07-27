@@ -27,7 +27,7 @@ namespace Wvote
 
         private void Register(object sender, EventArgs e)
         {
-            string connectionString = "Data Source=HP\\SQLEXPRESS;Initial Catalog=Voiting-Stah; Integrated Security=True; TrustServerCertificate=True";
+            string connectionString = "Data Source=HP\\SQLEXPRESS;Initial Catalog=Voiting_System; Integrated Security=True; TrustServerCertificate=True";
             if (EmailText.Text.Contains("@"))
             {
                 string sqlQuery = "INSERT INTO Voter (FullName, Email) VALUES (" + "'" + FullNameText.Text + "'" + "," + "'" + EmailText.Text + "'" + ")";

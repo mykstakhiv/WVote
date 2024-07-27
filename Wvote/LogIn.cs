@@ -49,7 +49,7 @@ namespace Wvote
         
         private void LogInBttn(object sender, EventArgs e)
         {
-            string connectionString = "Data Source=HP\\SQLEXPRESS;Initial Catalog=Voiting-Stah; Integrated Security=True; TrustServerCertificate=True";
+            string connectionString = "Data Source=HP\\SQLEXPRESS;Initial Catalog=Voiting_System; Integrated Security=True; TrustServerCertificate=True";
             
 
             string query = "SELECT * FROM Voter";
@@ -66,10 +66,14 @@ namespace Wvote
                 string fullName = reader.GetString(1);
                 string email = reader.GetString(2);
 
-                if (fullName == FullNameText.Text || email == EmailText.Text)
+                if (fullName == FullNameText.Text)
                 {
-                    vt.Show();
-                    break;
+                    if(email == EmailText.Text)
+                    {
+                        vt.Show();
+                        break;
+                    }
+                    
                 }
             }
 

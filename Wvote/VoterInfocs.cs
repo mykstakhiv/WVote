@@ -8,8 +8,10 @@ namespace Wvote
 {
     public class VoterInfocs
     {
-        public List<int> Id { get; set; }
-        public List<string> FullName { get; set; }
-        public List<string> Email { get; set; } = new List<string>();
+        public int Id { get; set; }
+        public int FullName { get; set; }
+        public int Email { get; set; } 
+
+
     } 
 }

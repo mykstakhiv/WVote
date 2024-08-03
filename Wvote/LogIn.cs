@@ -16,25 +16,11 @@ namespace Wvote
 {
     public partial class LogIn : Form
     {
-        private static VoterInfocs inf = new VoterInfocs();
-        private static Votes vt = new Votes();
+        //instance of VoterInfo class to be able to move 
+        //details into Votes form
+        public VoterInfo voter;
 
-        private static LogIn instance;
-        private static RegisterForm reg;
-
-        public static LogIn Instance
-        {
-            get
-            {
-                if (instance == null)
-                {
-                    instance = new LogIn();
-                }
-                return instance;
-            }
-        }
-
-
+        
         public LogIn()
         {
             InitializeComponent();
@@ -44,12 +30,13 @@ namespace Wvote
         private void RegisterLinkOpenForm(object sender, LinkLabelLinkClickedEventArgs e) 
         {
             this.Hide();
-            RegisterForm.Instance.Show();
+            var editForm = new RegisterForm();
+            var response = editForm.ShowDialog();
         }
         
         private void LogInBttn(object sender, EventArgs e)
         {
-            string connectionString = "Data Source=HP\\SQLEXPRESS;Initial Catalog=Voiting_System; Integrated Security=True; TrustServerCertificate=True";
+            string connectionString = "Data Source=HP\\SQLEXPRESS;Initial Catalog=Voiting; Integrated Security=True; TrustServerCertificate=True";
             
 
             string query = "SELECT * FROM Voter";
@@ -70,7 +57,11 @@ namespace Wvote
                 {
                     if(email == EmailText.Text)
                     {
-                        vt.Show();
+                        this.Hide();
+                        //initialization of the object with Name and Email - LogIn
+                        voter = new VoterInfo(FullNameText.Text, EmailText.Text);
+                        var editForm = new Votes(voter);
+                        var response = editForm.ShowDialog();
                         break;
                     }
                     

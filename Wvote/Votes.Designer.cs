@@ -93,6 +93,7 @@
             Jolteon.Size = new Size(18, 17);
             Jolteon.TabIndex = 4;
             Jolteon.UseVisualStyleBackColor = true;
+            Jolteon.CheckedChanged += Jolteon_CheckedChanged;
             // 
             // Squirtle
             // 
@@ -102,6 +103,7 @@
             Squirtle.Size = new Size(18, 17);
             Squirtle.TabIndex = 5;
             Squirtle.UseVisualStyleBackColor = true;
+            Squirtle.CheckedChanged += Squirtle_CheckedChanged;
             // 
             // pikachu
             // 

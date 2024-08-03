@@ -4,20 +4,6 @@ namespace Wvote
 {
     public partial class RegisterForm : Form
     {
-        private static RegisterForm instance;
-        private static LogIn log;
-
-        public static RegisterForm Instance
-        {
-            get
-            {
-                if (instance == null)
-                {
-                    instance = new RegisterForm();
-                }
-                return instance;
-            }
-        }
 
         public RegisterForm()
         {
@@ -27,7 +13,11 @@ namespace Wvote
 
         private void Register(object sender, EventArgs e)
         {
-            string connectionString = "Data Source=HP\\SQLEXPRESS;Initial Catalog=Voiting_System; Integrated Security=True; TrustServerCertificate=True";
+            string connectionString = "Data Source=HP\\SQLEXPRESS;" +
+                "Initial Catalog=Voiting; " +
+                "Integrated Security=True; " +
+                "TrustServerCertificate=True";
+
             if (EmailText.Text.Contains("@"))
             {
                 string sqlQuery = "INSERT INTO Voter (FullName, Email) VALUES (" + "'" + FullNameText.Text + "'" + "," + "'" + EmailText.Text + "'" + ")";
@@ -50,7 +40,8 @@ namespace Wvote
         private void LogInLinkForm(object sender, LinkLabelLinkClickedEventArgs e) 
         {
             this.Hide();
-            LogIn.Instance.Show();
+            var editForm = new LogIn();
+            var response = editForm.ShowDialog();
 
         }
         

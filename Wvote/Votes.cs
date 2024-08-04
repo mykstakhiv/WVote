@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -16,8 +17,8 @@ namespace Wvote
     {
         public VoterInfo voter;
 
-
-        private static string connectionString = 
+        //connecting database
+        private static string connectionString =
             "Data Source=HP\\SQLEXPRESS;" +
             "Initial Catalog=Voiting; " +
             "Integrated Security=True; " +
@@ -27,11 +28,13 @@ namespace Wvote
         public static SqlConnection con = new SqlConnection(connectionString);
         public SqlCommand sc = new SqlCommand(sqlQuery, con);
 
+
+    
         public Votes(VoterInfo voter)
         {
             this.voter = voter;
             InitializeComponent();
-            this.StartPosition = FormStartPosition.CenterScreen;    
+            this.StartPosition = FormStartPosition.CenterScreen;
         }
 
         private void pikachu_CheckedChanged(object sender, EventArgs e)
@@ -43,44 +46,15 @@ namespace Wvote
 
                 con.Open();
                 sc.ExecuteNonQuery();
-
-                string query = "SELECT * FROM Result";
-                
-                SqlCommand command = new SqlCommand(query, con);
-                SqlDataReader reader = command.ExecuteReader();
-
-                while (reader.Read())
-                {
-
-                    string fullName = reader.GetString(1);
-                    string email = reader.GetString(2);
-
-                    if (fullName == voter.FullName)
-                    {
-                        if (email == voter.Email)
-                        {
-                            int id = reader.GetInt32(0);
-                            string sqlQuery = "INSERT INTO Result (VoterId, PokemonId) " +
-                                              "VALUES (@VoterId, @PokemonID)";
-
-
-                            SqlConnection con = new SqlConnection(connectionString);
-                            SqlCommand sc = new SqlCommand(sqlQuery, con);
-                            sc.Parameters.AddWithValue("@VoterId", id);
-                            sc.Parameters.AddWithValue("@PokemonId", id);
-                            break;
-                        }
-
-                    }
-                }
-
                 con.Close();
+
+                AddVote(voter.FullName, voter.Email);
             }
             else
             {
                 MessageBox.Show("You have voted already");
             }
-            
+
         }
 
         private void Squirtle_CheckedChanged(object sender, EventArgs e)
@@ -93,14 +67,13 @@ namespace Wvote
                 sc.ExecuteNonQuery();
                 con.Close();
 
-                //string fullName = reader.GetString(1);
-                //string email = reader.GetString(2);
+                AddVote(voter.FullName, voter.Email);
             }
             else
             {
                 MessageBox.Show("You have voted already");
             }
-           
+
         }
 
         private void Jolteon_CheckedChanged(object sender, EventArgs e)
@@ -112,11 +85,56 @@ namespace Wvote
                 con.Open();
                 sc.ExecuteNonQuery();
                 con.Close();
+
+                AddVote(voter.FullName, voter.Email);
             }
             else
             {
                 MessageBox.Show("You have voted already");
             }
         }
+
+        public void AddVote(string voterFullName, string voterEmail)
+        {
+            string getVoterIdQuery = "SELECT VoterId FROM Voter WHERE FullName = @FullName AND Email = @Email";
+            int voterId;
+
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                
+                using (SqlCommand sqlcm = new SqlCommand(getVoterIdQuery, con))
+                {
+                    sqlcm.Parameters.AddWithValue("@FullName", voterFullName);
+                    sqlcm.Parameters.AddWithValue("@Email", voterEmail);
+
+                    con.Open();
+                    object result = sqlcm.ExecuteScalar();
+                    con.Close();
+
+                    if (result != null)
+                    {
+                        voterId = Convert.ToInt32(result);
+                    }
+                    else
+                    {
+                        throw new Exception("Voter not found.");
+                    }
+                }
+
+                string insertQuery = "INSERT INTO dbo.Result (VoterId, PokemonId) VALUES (@VoterId, @PokemonId)";
+
+                using (SqlCommand command = new SqlCommand(insertQuery, con))
+                {
+                    //VoterId and PokemonId are the same id because the voter is checked only when he logs in
+                    command.Parameters.AddWithValue("@VoterId", voterId);
+                    command.Parameters.AddWithValue("@PokemonId", voterId);
+
+                    con.Open();
+                    command.ExecuteNonQuery();
+                    con.Close();
+                }
+            }
+        }
     }
 }
+

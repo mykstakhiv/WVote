@@ -7,7 +7,7 @@ using Microsoft.Data.SqlClient;
 
 namespace Wvote
 {
-    //Classes to communicate between forms
+    //Class to communicate between forms
     public class VoterInfo
     {
         public VoterInfo(string name, string email)

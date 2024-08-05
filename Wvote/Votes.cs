@@ -16,6 +16,7 @@ namespace Wvote
     public partial class Votes : Form
     {
         public VoterInfo voter;
+        public Pokemon pokemon;
 
         //connecting database
         private static string connectionString =
@@ -23,7 +24,8 @@ namespace Wvote
             "Initial Catalog=Voiting; " +
             "Integrated Security=True; " +
             "TrustServerCertificate=True";
-        private static string sqlQuery = "INSERT INTO Pokemon (PokemonName) VALUES (@PokemonName)";
+        private static string sqlQuery = "INSERT INTO Pokemon (PokemonName) " +
+                                         "OUTPUT INSERTED.PokemonId VALUES (@PokemonName)";
 
         public static SqlConnection con = new SqlConnection(connectionString);
         public SqlCommand sc = new SqlCommand(sqlQuery, con);
@@ -45,10 +47,10 @@ namespace Wvote
                 sc.Parameters.AddWithValue("@PokemonName", "Pikachu");
 
                 con.Open();
-                sc.ExecuteNonQuery();
+                int pokemonId = Convert.ToInt32(sc.ExecuteScalar());
                 con.Close();
 
-                AddVote(voter.FullName, voter.Email);
+                AddVote(voter.FullName, voter.Email, pokemonId);
             }
             else
             {
@@ -64,10 +66,10 @@ namespace Wvote
                 sc.Parameters.AddWithValue("@PokemonName", "Squirtle");
 
                 con.Open();
-                sc.ExecuteNonQuery();
+                int pokemonId = Convert.ToInt32(sc.ExecuteScalar());
                 con.Close();
 
-                AddVote(voter.FullName, voter.Email);
+                AddVote(voter.FullName, voter.Email, pokemonId);
             }
             else
             {
@@ -83,10 +85,10 @@ namespace Wvote
                 sc.Parameters.AddWithValue("@PokemonName", "Jolteon");
 
                 con.Open();
-                sc.ExecuteNonQuery();
+                int pokemonId = Convert.ToInt32(sc.ExecuteScalar());
                 con.Close();
 
-                AddVote(voter.FullName, voter.Email);
+                AddVote(voter.FullName, voter.Email, pokemonId);
             }
             else
             {
@@ -94,7 +96,7 @@ namespace Wvote
             }
         }
 
-        public void AddVote(string voterFullName, string voterEmail)
+        public void AddVote(string voterFullName, string voterEmail, int pokemonId)
         {
             string getVoterIdQuery = "SELECT VoterId FROM Voter WHERE FullName = @FullName AND Email = @Email";
             int voterId;
@@ -125,9 +127,8 @@ namespace Wvote
 
                 using (SqlCommand command = new SqlCommand(insertQuery, con))
                 {
-                    //VoterId and PokemonId are the same id because the voter is checked only when he logs in
                     command.Parameters.AddWithValue("@VoterId", voterId);
-                    command.Parameters.AddWithValue("@PokemonId", voterId);
+                    command.Parameters.AddWithValue("@PokemonId", pokemonId);
 
                     con.Open();
                     command.ExecuteNonQuery();

@@ -119,7 +119,7 @@
             Controls.Add(FullNameText);
             Controls.Add(button1);
             Name = "RegisterForm";
-            Text = "Form1";
+            Text = "Registration";
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ResumeLayout(false);
             PerformLayout();

@@ -1,6 +1,7 @@
 using Microsoft.Data.SqlClient;
 using System.Windows.Forms;
 using BCrypt.Net;
+using System.Configuration;
 
 
 namespace Wvote
@@ -20,6 +21,7 @@ namespace Wvote
                 "Initial Catalog=Voiting; " +
                 "Integrated Security=True; " +
                 "TrustServerCertificate=True";
+            
 
             if (EmailText.Text.Contains("@"))
             {

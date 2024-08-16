@@ -58,7 +58,7 @@ namespace Wvote
                 {
                     if (email == EmailText.Text)
                     {
-                        if (VerifyPassword(passwordT.Text, hashedPassword))
+                        if (VerifyPassword(passwordT.Text, hashedPassword) == true)
                         {
                             this.Hide();
                             //initialization of the object with Name and Email - LogIn
@@ -68,10 +68,8 @@ namespace Wvote
                             break;
                         }
                     }
-
                 }
             }
-
         }
         public bool VerifyPassword(string password, string hashedPassword)
         {

@@ -35,6 +35,8 @@
             label1 = new Label();
             label2 = new Label();
             LohInLink = new LinkLabel();
+            passwordT = new TextBox();
+            label3 = new Label();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
             // 
@@ -51,14 +53,14 @@
             // 
             // FullNameText
             // 
-            FullNameText.Location = new Point(349, 170);
+            FullNameText.Location = new Point(349, 131);
             FullNameText.Name = "FullNameText";
             FullNameText.Size = new Size(125, 27);
             FullNameText.TabIndex = 1;
             // 
             // EmailText
             // 
-            EmailText.Location = new Point(349, 247);
+            EmailText.Location = new Point(349, 208);
             EmailText.Name = "EmailText";
             EmailText.Size = new Size(125, 27);
             EmailText.TabIndex = 2;
@@ -77,7 +79,7 @@
             // 
             label1.AutoSize = true;
             label1.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label1.Location = new Point(349, 142);
+            label1.Location = new Point(349, 103);
             label1.Name = "label1";
             label1.Size = new Size(89, 25);
             label1.TabIndex = 4;
@@ -87,7 +89,7 @@
             // 
             label2.AutoSize = true;
             label2.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label2.Location = new Point(349, 219);
+            label2.Location = new Point(349, 180);
             label2.Name = "label2";
             label2.Size = new Size(58, 25);
             label2.TabIndex = 5;
@@ -106,11 +108,30 @@
             LohInLink.Text = "Log In";
             LohInLink.LinkClicked += LogInLinkForm;
             // 
+            // passwordT
+            // 
+            passwordT.Location = new Point(349, 288);
+            passwordT.Name = "passwordT";
+            passwordT.Size = new Size(125, 27);
+            passwordT.TabIndex = 7;
+            // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label3.Location = new Point(349, 260);
+            label3.Name = "label3";
+            label3.Size = new Size(92, 25);
+            label3.TabIndex = 8;
+            label3.Text = "Password";
+            // 
             // RegisterForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(label3);
+            Controls.Add(passwordT);
             Controls.Add(LohInLink);
             Controls.Add(label2);
             Controls.Add(label1);
@@ -134,5 +155,7 @@
         private Label label1;
         private Label label2;
         private LinkLabel LohInLink;
+        private TextBox passwordT;
+        private Label label3;
     }
 }

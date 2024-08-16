@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Configuration;
 using System.Data;
 using System.Data.SqlTypes;
 using System.Drawing;
@@ -10,6 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.Configuration;
 using Microsoft.VisualBasic.Logging;
 
 namespace Wvote
@@ -25,12 +27,6 @@ namespace Wvote
             "Initial Catalog=Voiting; " +
             "Integrated Security=True; " +
             "TrustServerCertificate=True";
-        private static string sqlQuery = "INSERT INTO Pokemon (PokemonName) " +
-                                         "OUTPUT INSERTED.PokemonId VALUES (@PokemonName)";
-
-        public static SqlConnection con = new SqlConnection(connectionString);
-        public SqlCommand sc = new SqlCommand(sqlQuery, con);
-
 
         public Votes(VoterInfo voter)
         {
@@ -56,7 +52,7 @@ namespace Wvote
                     Enabled();
                     break;
                 case "0":
-                    MessageBox.Show("Please register");
+                    MessageBox.Show("Please try again");
                     break;
             }
         }
@@ -64,12 +60,15 @@ namespace Wvote
         private void pikachu_CheckedChanged(object sender, EventArgs e)
         {
             AddRightPokemon("Pikachu");
+            Enabled();
+
         }
 
         private void Squirtle_CheckedChanged(object sender, EventArgs e)
         {
             
             AddRightPokemon("Squirtle");
+            Enabled();
             
         }
 
@@ -77,27 +76,38 @@ namespace Wvote
         {
             
             AddRightPokemon("Jolteon");
-            
+            Enabled();
+
         }
 
         //method to add each pokemon
         public void AddRightPokemon(string pokemonName)
         {
-            if (!HasVoted())
+         string sqlQuery = "INSERT INTO Pokemon (PokemonName) OUTPUT INSERTED.PokemonId VALUES (@PokemonName)";
+
+            using(SqlConnection con = new SqlConnection(connectionString))
             {
-                sc.Parameters.AddWithValue("@PokemonName", pokemonName);
+                using (SqlCommand sc = new SqlCommand(sqlQuery, con))
+                {
+                    if (!HasVoted())
+                    {
+                        sc.Parameters.AddWithValue("@PokemonName", pokemonName);
 
-                con.Open();
-                int pokemonId = Convert.ToInt32(sc.ExecuteScalar());
-                con.Close();
+                        con.Open();
+                        int pokemonId = Convert.ToInt32(sc.ExecuteScalar());
+                        con.Close();
 
-                AddVote(voter.FullName, voter.Email, pokemonId);
+                        AddVote(voter.FullName, voter.Email, pokemonId);
 
+                    }
+                    else
+                    {
+                        MessageBox.Show("You have voted already for " + pokemonName);
+                    }
+                }
+                    
             }
-            else
-            {
-                MessageBox.Show("You have voted already for " + pokemonName);
-            }
+        
             
         }
 
@@ -163,6 +173,7 @@ namespace Wvote
             using (SqlConnection con = new SqlConnection(connectionString))
             {
 
+
                 using (SqlCommand sqlcm = new SqlCommand(getVoterIdQuery, con))
                 {
                     sqlcm.Parameters.AddWithValue("@FullName", voterFullName);
@@ -180,7 +191,7 @@ namespace Wvote
 
                         using (SqlCommand cmd = new SqlCommand(getPokemonIdQuery, con))
                         {
-                            cmd.Parameters.AddWithValue("VoterId", voterId);
+                            cmd.Parameters.AddWithValue("@VoterId", voterId);
 
                             con.Open();
                             object resultPokId = cmd.ExecuteScalar();
@@ -202,16 +213,19 @@ namespace Wvote
         {
             string getPokemonIdQuery = "SELECT PokemonName FROM Pokemon WHERE PokemonId = @PokemonId";
 
-            using (SqlCommand cmd = new SqlCommand(getPokemonIdQuery, con))
+            using (SqlConnection con = new SqlConnection(connectionString))
             {
-                cmd.Parameters.AddWithValue("PokemonId", pokemonId);
+                using (SqlCommand cmd = new SqlCommand(getPokemonIdQuery, con))
+                {
+                    cmd.Parameters.AddWithValue("@PokemonId", pokemonId);
 
-                con.Open();
-                object resultPokId = cmd.ExecuteScalar();
-                string pokemonName = Convert.ToString(resultPokId);
-                con.Close();
+                    con.Open();
+                    object resultPokId = cmd.ExecuteScalar();
+                    string pokemonName = Convert.ToString(resultPokId);
+                    con.Close();
 
-                return pokemonName;
+                    return pokemonName;
+                }
             }
         }
     }

@@ -10,15 +10,14 @@ namespace Wvote
     //Class to communicate between forms
     public class VoterInfo
     {
+        public string FullName { get; init; }
+        public string Email { get; init; }
+
         public VoterInfo(string name, string email)
         {
             FullName = name;
             Email = email;
         }
-        public string FullName { get; init; } 
-        public string Email { get; init; } 
-
-        
     }
 
     public class Pokemon(string pokName) 

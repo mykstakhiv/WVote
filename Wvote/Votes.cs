@@ -37,80 +37,74 @@ namespace Wvote
             this.voter = voter;
             InitializeComponent();
             this.StartPosition = FormStartPosition.CenterScreen;
+
             int pokemonId = GetId(voter.FullName, voter.Email);
             string pokemonName = GetPokName(pokemonId);
+
             switch (pokemonName)
             {
-                case "Pickachu":
+                case "Pikachu":
                     pikachu.Checked = true;
+                    Enabled();
                     break;
                 case "Squirtle":
                     Squirtle.Checked = true;
+                    Enabled();
                     break;
                 case "Jolteon":
                     Jolteon.Checked = true;
+                    Enabled();
                     break;
                 case "0":
-                    MessageBox.Show("You areloser");
+                    MessageBox.Show("Please register");
                     break;
             }
         }
 
         private void pikachu_CheckedChanged(object sender, EventArgs e)
         {
-            if (pikachu.Checked == true && Jolteon.Checked != true && Squirtle.Checked != true)
-            {
-                sc.Parameters.AddWithValue("@PokemonName", "Pikachu");
-
-                con.Open();
-                int pokemonId = Convert.ToInt32(sc.ExecuteScalar());
-                con.Close();
-
-                AddVote(voter.FullName, voter.Email, pokemonId);
-            }
-            else
-            {
-                MessageBox.Show("You have voted already");
-                pikachu.Checked = false;
-            }
-
+            AddRightPokemon("Pikachu");
         }
 
         private void Squirtle_CheckedChanged(object sender, EventArgs e)
         {
-            if (pikachu.Checked != true && Jolteon.Checked != true && Squirtle.Checked == true)
-            {
-                sc.Parameters.AddWithValue("@PokemonName", "Squirtle");
-
-                con.Open();
-                int pokemonId = Convert.ToInt32(sc.ExecuteScalar());
-                con.Close();
-
-                AddVote(voter.FullName, voter.Email, pokemonId);
-            }
-            else
-            {
-                MessageBox.Show("You have voted already");
-            }
-
+            
+            AddRightPokemon("Squirtle");
+            
         }
 
         private void Jolteon_CheckedChanged(object sender, EventArgs e)
         {
-            if (pikachu.Checked != true && Jolteon.Checked == true && Squirtle.Checked != true)
+            
+            AddRightPokemon("Jolteon");
+            
+        }
+
+        //method to add each pokemon
+        public void AddRightPokemon(string pokemonName)
+        {
+            if (!HasVoted())
             {
-                sc.Parameters.AddWithValue("@PokemonName", "Jolteon");
+                sc.Parameters.AddWithValue("@PokemonName", pokemonName);
 
                 con.Open();
                 int pokemonId = Convert.ToInt32(sc.ExecuteScalar());
                 con.Close();
 
                 AddVote(voter.FullName, voter.Email, pokemonId);
+
             }
             else
             {
-                MessageBox.Show("You have voted already");
+                MessageBox.Show("You have voted already for " + pokemonName);
             }
+            
+        }
+
+        private bool HasVoted()
+        {
+            int pokemonId = GetId(voter.FullName, voter.Email);
+            return pokemonId != 0; // If pokemonId is not 0, it means the user has already voted
         }
 
         public void AddVote(string voterFullName, string voterEmail, int pokemonId)
@@ -120,7 +114,7 @@ namespace Wvote
 
             using (SqlConnection con = new SqlConnection(connectionString))
             {
-                
+
                 using (SqlCommand sqlcm = new SqlCommand(getVoterIdQuery, con))
                 {
                     sqlcm.Parameters.AddWithValue("@FullName", voterFullName);
@@ -154,6 +148,12 @@ namespace Wvote
             }
         }
 
+        public void Enabled()
+        {
+            pikachu.Enabled = false;
+            Squirtle.Enabled = false;
+            Jolteon.Enabled = false;
+        }
         public int GetId(string voterFullName, string voterEmail)
         {
             //check if the user exists
@@ -177,7 +177,7 @@ namespace Wvote
                         voterId = Convert.ToInt32(result);
 
                         string getPokemonIdQuery = "SELECT PokemonId FROM Result WHERE VoterId = @VoterId";
-                        
+
                         using (SqlCommand cmd = new SqlCommand(getPokemonIdQuery, con))
                         {
                             cmd.Parameters.AddWithValue("VoterId", voterId);
@@ -214,12 +214,5 @@ namespace Wvote
                 return pokemonName;
             }
         }
-        public void ResetAllCheckBoxes()
-        {
-            pikachu.Checked = false;
-            Squirtle.Checked = false;
-            Jolteon.Checked = false;
-        }
     }
 }
-

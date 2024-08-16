@@ -20,7 +20,8 @@ namespace Wvote
         {
             if (!string.IsNullOrEmpty(FullNameText.Text) &&
                 !string.IsNullOrEmpty(EmailText.Text) &&
-                !string.IsNullOrEmpty(passwordT.Text)) {
+                !string.IsNullOrEmpty(passwordT.Text))
+            {
 
                 bool check = CheckVoter(FullNameText.Text, EmailText.Text);
 
@@ -73,11 +74,11 @@ namespace Wvote
             }
         }
 
-        public bool CheckVoter(string fullName, string email) 
+        public bool CheckVoter(string fullName, string email)
         {
             string connectionString = "Data Source=HP\\SQLEXPRESS;Initial Catalog=Voiting;Integrated Security=True;TrustServerCertificate=True";
 
-            string query = "SELECT COUNT(*) FROM Voter WHERE FullName = @FullName AND Email = @Email";
+            string query = "SELECT COUNT(*) FROM Voter WHERE Email = @Email";
 
             try
             {
@@ -87,7 +88,6 @@ namespace Wvote
 
                     using (SqlCommand command = new SqlCommand(query, con))
                     {
-                        command.Parameters.AddWithValue("@FullName", fullName);
                         command.Parameters.AddWithValue("@Email", email);
 
                         int count = (int)command.ExecuteScalar();
@@ -103,14 +103,14 @@ namespace Wvote
                 return true;
             }
         }
-        private void LogInLinkForm(object sender, LinkLabelLinkClickedEventArgs e) 
+        private void LogInLinkForm(object sender, LinkLabelLinkClickedEventArgs e)
         {
             this.Hide();
             var editForm = new LogIn();
             var response = editForm.ShowDialog();
 
         }
-         public string HashPassword(string password)
+        public string HashPassword(string password)
         {
             string hashedPassword = BCrypt.Net.BCrypt.HashPassword(password);
             return hashedPassword;

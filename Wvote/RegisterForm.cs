@@ -2,6 +2,7 @@ using Microsoft.Data.SqlClient;
 using System.Windows.Forms;
 using BCrypt.Net;
 using System.Configuration;
+using System.Diagnostics.Metrics;
 
 
 namespace Wvote
@@ -17,42 +18,91 @@ namespace Wvote
 
         private void Register(object sender, EventArgs e)
         {
-            string connectionString = "Data Source=HP\\SQLEXPRESS;" +
-                "Initial Catalog=Voiting; " +
-                "Integrated Security=True; " +
-                "TrustServerCertificate=True";
-            
+            if (!string.IsNullOrEmpty(FullNameText.Text) &&
+                !string.IsNullOrEmpty(EmailText.Text) &&
+                !string.IsNullOrEmpty(passwordT.Text)) {
 
-            if (EmailText.Text.Contains("@"))
-            {
-                using (SqlConnection con = new SqlConnection(connectionString))
+                bool check = CheckVoter(FullNameText.Text, EmailText.Text);
+
+                if (check == false)
                 {
-                    string sqlQuery = "INSERT INTO Voter (FullName, Email, Password) VALUES (@FullName, @Email, @Password)";
 
-                    using (SqlCommand sc = new SqlCommand(sqlQuery, con))
+                    string connectionString = "Data Source=HP\\SQLEXPRESS;" +
+                        "Initial Catalog=Voiting; " +
+                        "Integrated Security=True; " +
+                        "TrustServerCertificate=True";
+
+
+                    if (EmailText.Text.Contains("@"))
                     {
-                        sc.Parameters.AddWithValue("@FullName", FullNameText.Text);
-                        sc.Parameters.AddWithValue("@Email", EmailText.Text);
+                        using (SqlConnection con = new SqlConnection(connectionString))
+                        {
+                            string sqlQuery = "INSERT INTO Voter (FullName, Email, Password) VALUES (@FullName, @Email, @Password)";
 
-                        string hashedPassword = HashPassword(passwordT.Text);
-                        sc.Parameters.AddWithValue("@Password", hashedPassword);
+                            using (SqlCommand sc = new SqlCommand(sqlQuery, con))
+                            {
+                                sc.Parameters.AddWithValue("@FullName", FullNameText.Text);
+                                sc.Parameters.AddWithValue("@Email", EmailText.Text);
 
-                        con.Open();
-                        sc.ExecuteNonQuery();
-                        con.Close();
+                                string hashedPassword = HashPassword(passwordT.Text);
+                                sc.Parameters.AddWithValue("@Password", hashedPassword);
+
+                                con.Open();
+                                sc.ExecuteNonQuery();
+                                con.Close();
+                            }
+                        }
+
+                        FullNameText.Text = null;
+                        EmailText.Text = null;
+                        passwordT.Text = null;
+                    }
+                    else
+                    {
+                        MessageBox.Show("Please enter correct email address");
                     }
                 }
-
-                FullNameText.Text = null;
-                EmailText.Text = null;
-                passwordT.Text = null;  
+                else
+                {
+                    MessageBox.Show("User already exists");
+                }
             }
             else
             {
-                MessageBox.Show("Please enter correct email address");
+                MessageBox.Show("Please fill all boxes");
             }
         }
 
+        public bool CheckVoter(string fullName, string email) 
+        {
+            string connectionString = "Data Source=HP\\SQLEXPRESS;Initial Catalog=Voiting;Integrated Security=True;TrustServerCertificate=True";
+
+            string query = "SELECT COUNT(*) FROM Voter WHERE FullName = @FullName AND Email = @Email";
+
+            try
+            {
+                using (SqlConnection con = new SqlConnection(connectionString))
+                {
+                    con.Open();
+
+                    using (SqlCommand command = new SqlCommand(query, con))
+                    {
+                        command.Parameters.AddWithValue("@FullName", fullName);
+                        command.Parameters.AddWithValue("@Email", email);
+
+                        int count = (int)command.ExecuteScalar();
+
+                        return count > 0;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("An error occurred: " + ex.Message);
+
+                return true;
+            }
+        }
         private void LogInLinkForm(object sender, LinkLabelLinkClickedEventArgs e) 
         {
             this.Hide();

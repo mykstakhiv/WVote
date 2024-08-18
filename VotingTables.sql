@@ -1,19 +1,20 @@
 CREATE TABLE Voter (
     VoterId INT IDENTITY(1,1) PRIMARY KEY,
-    FullName VARCHAR(100),
-    Email VARCHAR(100),
-    Password NVARCHAR(255)
+    FullName VARCHAR(100) NOT NULL,
+    Email VARCHAR(100) NOT NULL,
+    Password NVARCHAR(255) NOT NULL
 );
 
 CREATE TABLE Pokemon (
     PokemonId INT IDENTITY(1,1) PRIMARY KEY,
-    PokemonName VARCHAR(100)
+    PokemonName VARCHAR(100) NOT NULL
 );
 
 CREATE TABLE Result (
     ResultId INT IDENTITY(1,1) PRIMARY KEY,
-    VoterId INT,
-    PokemonId INT,
+    VoterId INT NOT NULL,
+    PokemonId INT NOT NULL,
     FOREIGN KEY (VoterId) REFERENCES Voter(VoterId),
     FOREIGN KEY (PokemonId) REFERENCES Pokemon(PokemonId)
 );
+

@@ -1,7 +1,8 @@
 CREATE TABLE Voter (
     VoterId INT IDENTITY(1,1) PRIMARY KEY,
     FullName VARCHAR(100),
-    Email VARCHAR(100)
+    Email VARCHAR(100),
+    Password NVARCHAR(255)
 );
 
 CREATE TABLE Pokemon (

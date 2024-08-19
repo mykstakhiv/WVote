@@ -27,7 +27,7 @@ namespace Wvote
 
     public class SqlConnectionString 
     {
-        public string ConnectionString { get; set; } 
+        public string ConnectionString { get; } 
 
         public SqlConnectionString()
         {

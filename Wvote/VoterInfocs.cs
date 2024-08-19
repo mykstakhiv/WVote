@@ -24,4 +24,15 @@ namespace Wvote
     {
         public string PokemonName { get; init; } = pokName;
     }
+
+    public class SqlConnectionString 
+    {
+        public string ConnectionString { get; set; } 
+
+        public SqlConnectionString()
+        {
+            ConnectionString = "Data Source=HP\\SQLEXPRESS;Initial Catalog=Voiting; Integrated Security=True; TrustServerCertificate=True";
+        }
+        
+    }
 }

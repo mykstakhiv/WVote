@@ -20,13 +20,9 @@ namespace Wvote
     {
         public VoterInfo voter;
         public Pokemon pokemon;
-
         //connecting database
-        private static string connectionString =
-            "Data Source=HP\\SQLEXPRESS;" +
-            "Initial Catalog=Voiting; " +
-            "Integrated Security=True; " +
-            "TrustServerCertificate=True";
+        public SqlConnectionString conn = new SqlConnectionString();
+
 
         public Votes(VoterInfo voter)
         {
@@ -85,7 +81,7 @@ namespace Wvote
         {
          string sqlQuery = "INSERT INTO Pokemon (PokemonName) OUTPUT INSERTED.PokemonId VALUES (@PokemonName)";
 
-            using(SqlConnection con = new SqlConnection(connectionString))
+            using(SqlConnection con = new SqlConnection(conn.ConnectionString))
             {
                 using (SqlCommand sc = new SqlCommand(sqlQuery, con))
                 {
@@ -122,7 +118,7 @@ namespace Wvote
             string getVoterIdQuery = "SELECT VoterId FROM Voter WHERE FullName = @FullName AND Email = @Email";
             int voterId;
 
-            using (SqlConnection con = new SqlConnection(connectionString))
+            using (SqlConnection con = new SqlConnection(conn.ConnectionString))
             {
 
                 using (SqlCommand sqlcm = new SqlCommand(getVoterIdQuery, con))
@@ -170,7 +166,7 @@ namespace Wvote
             string getVoterIdQuery = "SELECT VoterId FROM Voter WHERE FullName = @FullName AND Email = @Email";
             int voterId;
 
-            using (SqlConnection con = new SqlConnection(connectionString))
+            using (SqlConnection con = new SqlConnection(conn.ConnectionString))
             {
 
 
@@ -213,7 +209,7 @@ namespace Wvote
         {
             string getPokemonIdQuery = "SELECT PokemonName FROM Pokemon WHERE PokemonId = @PokemonId";
 
-            using (SqlConnection con = new SqlConnection(connectionString))
+            using (SqlConnection con = new SqlConnection(conn.ConnectionString))
             {
                 using (SqlCommand cmd = new SqlCommand(getPokemonIdQuery, con))
                 {

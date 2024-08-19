@@ -20,11 +20,13 @@ namespace Wvote
         //details into Votes form
         public VoterInfo voter;
 
+        public SqlConnectionString conn = new SqlConnectionString();
 
         public LogIn()
         {
             InitializeComponent();
             this.StartPosition = FormStartPosition.CenterScreen;
+
         }
 
         private void RegisterLinkOpenForm(object sender, LinkLabelLinkClickedEventArgs e)
@@ -36,7 +38,7 @@ namespace Wvote
 
         private void LogInBttn(object sender, EventArgs e)
         {
-            string connectionString = "Data Source=HP\\SQLEXPRESS;Initial Catalog=Voiting; Integrated Security=True; TrustServerCertificate=True";
+            string connectionString = conn.ConnectionString;
 
 
             string query = "SELECT * FROM Voter";

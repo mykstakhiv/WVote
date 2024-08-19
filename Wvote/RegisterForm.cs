@@ -10,6 +10,8 @@ namespace Wvote
     public partial class RegisterForm : Form
     {
 
+        public SqlConnectionString conn = new SqlConnectionString();
+
         public RegisterForm()
         {
             InitializeComponent();
@@ -28,10 +30,7 @@ namespace Wvote
                 if (check == false)
                 {
 
-                    string connectionString = "Data Source=HP\\SQLEXPRESS;" +
-                        "Initial Catalog=Voiting; " +
-                        "Integrated Security=True; " +
-                        "TrustServerCertificate=True";
+                    string connectionString = conn.ConnectionString;
 
 
                     if (EmailText.Text.Contains("@"))
@@ -76,7 +75,7 @@ namespace Wvote
 
         public bool CheckVoter(string fullName, string email)
         {
-            string connectionString = "Data Source=HP\\SQLEXPRESS;Initial Catalog=Voiting;Integrated Security=True;TrustServerCertificate=True";
+            string connectionString = conn.ConnectionString;
 
             string query = "SELECT COUNT(*) FROM Voter WHERE Email = @Email";
 
@@ -98,7 +97,7 @@ namespace Wvote
             }
             catch (Exception ex)
             {
-                Console.WriteLine("An error occurred: " + ex.Message);
+                MessageBox.Show("An error occurred: " + ex.Message);
 
                 return true;
             }

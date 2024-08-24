@@ -37,6 +37,7 @@
             button1 = new Button();
             label3 = new Label();
             passwordT = new TextBox();
+            showPass = new CheckBox();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
             // 
@@ -122,14 +123,28 @@
             // 
             passwordT.Location = new Point(350, 287);
             passwordT.Name = "passwordT";
+            passwordT.PasswordChar = '#';
             passwordT.Size = new Size(125, 27);
             passwordT.TabIndex = 14;
+            // 
+            // showPass
+            // 
+            showPass.AutoSize = true;
+            showPass.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            showPass.Location = new Point(350, 320);
+            showPass.Name = "showPass";
+            showPass.Size = new Size(156, 27);
+            showPass.TabIndex = 16;
+            showPass.Text = "Show Password";
+            showPass.UseVisualStyleBackColor = true;
+            showPass.CheckedChanged += showPassword;
             // 
             // LogIn
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(807, 450);
+            Controls.Add(showPass);
             Controls.Add(label3);
             Controls.Add(passwordT);
             Controls.Add(LohInLink);
@@ -157,5 +172,6 @@
         private Button button1;
         private Label label3;
         private TextBox passwordT;
+        private CheckBox showPass;
     }
 }

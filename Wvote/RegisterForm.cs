@@ -114,5 +114,23 @@ namespace Wvote
             string hashedPassword = BCrypt.Net.BCrypt.HashPassword(password);
             return hashedPassword;
         }
+
+        private void showPassword(object sender, EventArgs e)
+        {
+            if (showPass.Checked == true)
+            {
+                passwordT.PasswordChar = '\0';
+                return;
+            }
+            else if (showPass.Checked == false)
+            {
+                passwordT.PasswordChar = '#';
+                return;
+            }
+            else
+            {
+                return;
+            }
+        }
     }
 }

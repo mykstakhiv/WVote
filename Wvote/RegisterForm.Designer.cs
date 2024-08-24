@@ -37,6 +37,7 @@
             LohInLink = new LinkLabel();
             passwordT = new TextBox();
             label3 = new Label();
+            showPass = new CheckBox();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
             // 
@@ -112,6 +113,7 @@
             // 
             passwordT.Location = new Point(349, 288);
             passwordT.Name = "passwordT";
+            passwordT.PasswordChar = '#';
             passwordT.Size = new Size(125, 27);
             passwordT.TabIndex = 7;
             // 
@@ -125,11 +127,24 @@
             label3.TabIndex = 8;
             label3.Text = "Password";
             // 
+            // showPass
+            // 
+            showPass.AutoSize = true;
+            showPass.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            showPass.Location = new Point(349, 321);
+            showPass.Name = "showPass";
+            showPass.Size = new Size(156, 27);
+            showPass.TabIndex = 9;
+            showPass.Text = "Show Password";
+            showPass.UseVisualStyleBackColor = true;
+            showPass.CheckedChanged += showPassword;
+            // 
             // RegisterForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(showPass);
             Controls.Add(label3);
             Controls.Add(passwordT);
             Controls.Add(LohInLink);
@@ -157,5 +172,6 @@
         private LinkLabel LohInLink;
         private TextBox passwordT;
         private Label label3;
+        private CheckBox showPass;
     }
 }

@@ -36,42 +36,58 @@ namespace Wvote
             var response = editForm.ShowDialog();
         }
 
+        //TC = O(log N), SC = O(1)
         private void LogInBttn(object sender, EventArgs e)
         {
             string connectionString = conn.ConnectionString;
 
 
-            string query = "SELECT * FROM Voter";
+            string query = "SELECT FullName, Email, Password FROM Voter WHERE FullName = @FullName AND Email = @Email";
 
-            SqlConnection con = new SqlConnection(connectionString);
-
-            con.Open();
-            SqlCommand command = new SqlCommand(query, con);
-            SqlDataReader reader = command.ExecuteReader();
-
-            while (reader.Read())
+            using (SqlConnection con = new SqlConnection(connectionString))
             {
+                con.Open();
 
-                string fullName = reader.GetString(1);
-                string email = reader.GetString(2);
-                string hashedPassword = reader.GetString(3);
-
-                if (fullName == FullNameText.Text)
+                using (SqlCommand command = new SqlCommand(query, con))
                 {
-                    if (email == EmailText.Text)
+                    command.Parameters.AddWithValue("@FullName", FullNameText.Text);
+                    command.Parameters.AddWithValue("@Email", EmailText.Text);
+
+                    using (SqlDataReader reader = command.ExecuteReader())
                     {
-                        if (VerifyPassword(passwordT.Text, hashedPassword) == true)
+                        while (reader.Read())
                         {
-                            this.Hide();
-                            //initialization of the object with Name and Email - LogIn
-                            voter = new VoterInfo(FullNameText.Text, EmailText.Text);
-                            var editForm = new Votes(voter);
-                            var response = editForm.ShowDialog();
-                            break;
+
+                            string fullName = reader.GetString(0);
+                            string email = reader.GetString(1);
+                            string hashedPassword = reader.GetString(2);
+
+                            if (fullName == FullNameText.Text)
+                            {
+                                if (email == EmailText.Text)
+                                {
+                                    if (VerifyPassword(passwordT.Text, hashedPassword) == true)
+                                    {
+                                        this.Hide();
+                                        //initialization of the object with Name and Email - LogIn
+                                        voter = new VoterInfo(FullNameText.Text, EmailText.Text);
+                                        var editForm = new Votes(voter);
+                                        var response = editForm.ShowDialog();
+                                        break;
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                MessageBox.Show("Please try again - an error occured");
+                            }
                         }
-                    }
+                    }   
                 }
             }
+
+
+                
         }
         public bool VerifyPassword(string password, string hashedPassword)
         {

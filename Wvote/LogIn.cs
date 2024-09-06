@@ -55,6 +55,8 @@ namespace Wvote
 
                     using (SqlDataReader reader = command.ExecuteReader())
                     {
+                        bool isValidUser = false;
+
                         while (reader.Read())
                         {
 
@@ -62,32 +64,34 @@ namespace Wvote
                             string email = reader.GetString(1);
                             string hashedPassword = reader.GetString(2);
 
-                            if (fullName == FullNameText.Text)
+                            if (fullName == FullNameText.Text && email == EmailText.Text)
                             {
-                                if (email == EmailText.Text)
+                                if (VerifyPassword(passwordT.Text, hashedPassword) == true)
                                 {
-                                    if (VerifyPassword(passwordT.Text, hashedPassword) == true)
-                                    {
-                                        this.Hide();
-                                        //initialization of the object with Name and Email - LogIn
-                                        voter = new VoterInfo(FullNameText.Text, EmailText.Text);
-                                        var editForm = new Votes(voter);
-                                        var response = editForm.ShowDialog();
-                                        break;
-                                    }
+                                    isValidUser = true;
+
+                                    this.Hide();
+                                    //initialization of the object with Name and Email - LogIn
+                                    voter = new VoterInfo(FullNameText.Text, EmailText.Text);
+                                    var editForm = new Votes(voter);
+                                    var response = editForm.ShowDialog();
+                                    break;
+                                }
+                                else
+                                {
+                                    // Password mismatch
+                                    MessageBox.Show("Incorrect password or email. Please try again.");
+                                    return;
                                 }
                             }
-                            else
-                            {
-                                MessageBox.Show("Please try again - an error occured");
-                            }
+                        }
+                        if (!isValidUser)
+                        {
+                            MessageBox.Show("User not found. Please check your name and email.");
                         }
                     }   
                 }
-            }
-
-
-                
+            }                
         }
         public bool VerifyPassword(string password, string hashedPassword)
         {

@@ -25,7 +25,7 @@ namespace Wvote
                 !string.IsNullOrEmpty(passwordT.Text))
             {
 
-                bool check = CheckVoter(FullNameText.Text, EmailText.Text);
+                bool check = CheckVoter(EmailText.Text);
 
                 if (check == false)
                 {
@@ -73,7 +73,7 @@ namespace Wvote
             }
         }
 
-        public bool CheckVoter(string fullName, string email)
+        public bool CheckVoter(string email)
         {
             string connectionString = conn.ConnectionString;
 

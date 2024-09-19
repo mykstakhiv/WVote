@@ -3,6 +3,7 @@ using System.Windows.Forms;
 using BCrypt.Net;
 using System.Configuration;
 using System.Diagnostics.Metrics;
+using System.Text.RegularExpressions;
 
 
 namespace Wvote
@@ -32,30 +33,37 @@ namespace Wvote
 
                     string connectionString = conn.ConnectionString;
 
+                    Regex symbols = new Regex("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[^a-zA-Z\\d]).+$");
 
                     if (EmailText.Text.Contains("@"))
                     {
-                        using (SqlConnection con = new SqlConnection(connectionString))
-                        {
-                            string sqlQuery = "INSERT INTO Voter (FullName, Email, Password) VALUES (@FullName, @Email, @Password)";
-
-                            using (SqlCommand sc = new SqlCommand(sqlQuery, con))
+                        if (symbols.IsMatch(passwordT.Text)) {
+                            using (SqlConnection con = new SqlConnection(connectionString))
                             {
-                                sc.Parameters.AddWithValue("@FullName", FullNameText.Text);
-                                sc.Parameters.AddWithValue("@Email", EmailText.Text);
+                                string sqlQuery = "INSERT INTO Voter (FullName, Email, Password) VALUES (@FullName, @Email, @Password)";
 
-                                string hashedPassword = HashPassword(passwordT.Text);
-                                sc.Parameters.AddWithValue("@Password", hashedPassword);
+                                using (SqlCommand sc = new SqlCommand(sqlQuery, con))
+                                {
+                                    sc.Parameters.AddWithValue("@FullName", FullNameText.Text);
+                                    sc.Parameters.AddWithValue("@Email", EmailText.Text);
 
-                                con.Open();
-                                sc.ExecuteNonQuery();
-                                con.Close();
+                                    string hashedPassword = HashPassword(passwordT.Text);
+                                    sc.Parameters.AddWithValue("@Password", hashedPassword);
+
+                                    con.Open();
+                                    sc.ExecuteNonQuery();
+                                    con.Close();
+                                }
                             }
-                        }
 
-                        FullNameText.Text = null;
-                        EmailText.Text = null;
-                        passwordT.Text = null;
+                            FullNameText.Text = null;
+                            EmailText.Text = null;
+                            passwordT.Text = null;
+                        }
+                        else
+                        {
+                            MessageBox.Show("Make sure that your password is secure");
+                        }
                     }
                     else
                     {

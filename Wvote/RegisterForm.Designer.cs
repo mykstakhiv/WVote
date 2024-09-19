@@ -38,6 +38,10 @@
             passwordT = new TextBox();
             label3 = new Label();
             showPass = new CheckBox();
+            label4 = new Label();
+            label5 = new Label();
+            label6 = new Label();
+            label7 = new Label();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
             // 
@@ -139,11 +143,53 @@
             showPass.UseVisualStyleBackColor = true;
             showPass.CheckedChanged += showPassword;
             // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.BackColor = Color.Transparent;
+            label4.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label4.Location = new Point(110, 335);
+            label4.Name = "label4";
+            label4.Size = new Size(148, 23);
+            label4.TabIndex = 10;
+            label4.Text = "Secure Password:";
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Location = new Point(113, 358);
+            label5.Name = "label5";
+            label5.Size = new Size(118, 20);
+            label5.TabIndex = 11;
+            label5.Text = "Include numbers";
+            // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.Location = new Point(113, 378);
+            label6.Name = "label6";
+            label6.Size = new Size(115, 20);
+            label6.TabIndex = 12;
+            label6.Text = "Include symbols";
+            // 
+            // label7
+            // 
+            label7.AutoSize = true;
+            label7.Location = new Point(113, 398);
+            label7.Name = "label7";
+            label7.Size = new Size(248, 20);
+            label7.TabIndex = 13;
+            label7.Text = "Include lower and upper case letters";
+            // 
             // RegisterForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(label7);
+            Controls.Add(label6);
+            Controls.Add(label5);
+            Controls.Add(label4);
             Controls.Add(showPass);
             Controls.Add(label3);
             Controls.Add(passwordT);
@@ -173,5 +219,9 @@
         private TextBox passwordT;
         private Label label3;
         private CheckBox showPass;
+        private Label label4;
+        private Label label5;
+        private Label label6;
+        private Label label7;
     }
 }

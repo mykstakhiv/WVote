@@ -79,7 +79,7 @@ namespace Wvote
         //method to add each pokemon
         public void AddRightPokemon(string pokemonName)
         {
-         string sqlQuery = "INSERT INTO Pokemon (PokemonName) OUTPUT INSERTED.PokemonId VALUES (@PokemonName)";
+         string sqlQuery = "INSERT INTO Pokemon (PokemonName)";
 
             using(SqlConnection con = new SqlConnection(conn.ConnectionString))
             {
